@@ -1,0 +1,4 @@
+spring:
+  modulith:
+    events:
+      republish-outstanding-events-on-restart: false
