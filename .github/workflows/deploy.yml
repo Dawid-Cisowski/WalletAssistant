@@ -56,6 +56,10 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
+          CLOUDSQL_INSTANCE="${{ env.GCP_PROJECT_ID }}:${{ env.GCP_REGION }}:app-db"
+          JDBC_URL="jdbc:postgresql:///wallet_assistant?cloudSqlInstance=${CLOUDSQL_INSTANCE}&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
+
+          # First deploy (URL not yet known — MCP_BASE_URL set in second step)
           gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
             --image "${{ env.IMAGE }}" \
             --region ${{ env.GCP_REGION }} \
@@ -65,6 +69,26 @@ jobs:
             --cpu-boost \
             --cpu-throttling \
             --allow-unauthenticated \
+            --add-cloudsql-instances "$CLOUDSQL_INSTANCE" \
+            --set-env-vars "SPRING_PROFILES_ACTIVE=production" \
+            --set-env-vars "SPRING_DATASOURCE_URL=$JDBC_URL" \
+            --set-env-vars "SPRING_DATASOURCE_USERNAME=wallet" \
+            --set-secrets "SPRING_DATASOURCE_PASSWORD=db-password:latest" \
+            --set-secrets "HMAC_DEVICES_JSON=hmac-devices-json:latest" \
+            --set-secrets "API_KEY=api-key:latest" \
+            --set-env-vars "API_KEY_ENABLED=true" \
+            --set-env-vars "API_KEY_DEVICE_ID=claude-ai" \
+            --set-env-vars "MCP_ENABLED=true" \
+            --quiet
+
+          # Fetch the actual Cloud Run URL and set MCP_BASE_URL
+          SERVICE_URL=$(gcloud run services describe ${{ env.CLOUD_RUN_SERVICE }} \
+            --region ${{ env.GCP_REGION }} \
+            --format="value(status.url)")
+
+          gcloud run services update ${{ env.CLOUD_RUN_SERVICE }} \
+            --region ${{ env.GCP_REGION }} \
+            --update-env-vars "MCP_BASE_URL=$SERVICE_URL" \
             --quiet
 
           gcloud run services update-traffic ${{ env.CLOUD_RUN_SERVICE }} \

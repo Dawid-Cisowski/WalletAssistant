@@ -62,6 +62,7 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
+    implementation("com.google.cloud.sql:postgres-socket-factory:1.23.1")
 
     // JSON
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
