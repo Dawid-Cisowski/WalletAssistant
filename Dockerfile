@@ -5,6 +5,7 @@ WORKDIR /app
 COPY gradlew ./
 COPY gradle gradle
 COPY build.gradle.kts settings.gradle.kts ./
+COPY integration-tests/build.gradle.kts integration-tests/build.gradle.kts
 
 RUN chmod +x ./gradlew && ./gradlew dependencies --no-daemon || true
 
