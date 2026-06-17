@@ -29,7 +29,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. HMAC secret and device ID come from `local.properties` via `BuildConfig` — never from hardcoded strings
   3. `local.properties` is listed in `.gitignore` from the first commit
   4. `HmacSigningInterceptor` is wired into `OkHttpClient` and signs every outgoing request automatically
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 01-01-PLAN.md — Project scaffold + BuildConfig secret injection + secret-safe git baseline (AUTH-02)
+- [ ] 01-02-PLAN.md — HMAC signing interceptor + Retrofit + end-to-end verification (HTTP 200) (AUTH-01)
 **UI hint**: no
 
 ### Phase 2: Expenses Screen
@@ -78,7 +80,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Android Foundation | 0/TBD | Not started | - |
+| 1. Android Foundation | 0/2 | Not started | - |
 | 2. Expenses Screen | 0/TBD | Not started | - |
 | 3. Accounts + Investments Screens | 0/TBD | Not started | - |
 | 4. Navigation Shell + Polish | 0/TBD | Not started | - |
