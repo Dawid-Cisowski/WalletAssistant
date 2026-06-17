@@ -7,8 +7,8 @@
 
 ### Authentication
 
-- [ ] **AUTH-01**: App wysyła każdy request do backendu z podpisem HMAC-SHA256 (nagłówki X-Device-Id, X-Timestamp, X-Nonce, X-Signature) — identyczny schemat jak HealthAssistant
-- [ ] **AUTH-02**: HMAC secret i device ID konfigurowane przez BuildConfig z local.properties (nigdy w git) — local.properties w .gitignore od pierwszego commita
+- [x] **AUTH-01**: App wysyła każdy request do backendu z podpisem HMAC-SHA256 (nagłówki X-Device-Id, X-Timestamp, X-Nonce, X-Signature) — identyczny schemat jak HealthAssistant
+- [x] **AUTH-02**: HMAC secret i device ID konfigurowane przez BuildConfig z local.properties (nigdy w git) — local.properties w .gitignore od pierwszego commita
 
 ### Expenses
 
@@ -71,8 +71,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | EXP-01 | Phase 2 | Pending |
 | EXP-02 | Phase 2 | Pending |
 | EXP-03 | Phase 2 | Pending |
@@ -87,6 +87,7 @@
 | APP-04 | Phase 4 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 14 total
 - Mapped to phases: 14
 - Unmapped: 0 ✓
