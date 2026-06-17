@@ -1,0 +1,72 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# ============================================================
+# WYMAGANE SECRETS W GITHUB REPO SETTINGS:
+#   GCP_SA_KEY        — base64-encoded Service Account JSON z prawami:
+#                       roles/run.admin, roles/artifactregistry.writer,
+#                       roles/iam.serviceAccountUser
+#
+# WYMAGANE VARIABLES W GITHUB REPO SETTINGS (opcjonalne, mają defaults):
+#   GCP_PROJECT_ID    — np. wallet-assistant-XXXXXX
+#   GCP_REGION        — np. europe-central2
+#   CLOUD_RUN_SERVICE — np. wallet-assistant
+#   AR_REPOSITORY     — np. wallet-assistant
+# ============================================================
+
+env:
+  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID || 'wallet-assistant' }}
+  GCP_REGION: ${{ vars.GCP_REGION || 'europe-central2' }}
+  CLOUD_RUN_SERVICE: ${{ vars.CLOUD_RUN_SERVICE || 'wallet-assistant' }}
+  AR_REPOSITORY: ${{ vars.AR_REPOSITORY || 'wallet-assistant' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        run: |
+          echo "${{ secrets.GCP_SA_KEY }}" | base64 --decode > "$RUNNER_TEMP/sa_key.json"
+          gcloud auth activate-service-account --key-file="$RUNNER_TEMP/sa_key.json"
+          gcloud config set project ${{ env.GCP_PROJECT_ID }}
+          rm "$RUNNER_TEMP/sa_key.json"
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE="${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPOSITORY }}/wallet-assistant:${{ github.sha }}"
+          IMAGE_LATEST="${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPOSITORY }}/wallet-assistant:latest"
+
+          docker build -t "$IMAGE" -t "$IMAGE_LATEST" .
+          docker push "$IMAGE"
+          docker push "$IMAGE_LATEST"
+
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
+            --image "${{ env.IMAGE }}" \
+            --region ${{ env.GCP_REGION }} \
+            --min-instances=0 \
+            --max-instances=3 \
+            --memory=768Mi \
+            --cpu-boost \
+            --cpu-throttling \
+            --allow-unauthenticated \
+            --quiet
+
+          gcloud run services update-traffic ${{ env.CLOUD_RUN_SERVICE }} \
+            --region ${{ env.GCP_REGION }} \
+            --to-latest
