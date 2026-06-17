@@ -1,0 +1,1 @@
+{"content":"Jetpack Compose BOM 2025.12.00 (stable Dec 2025) maps to Compose 1.10 + Material3 1.4.0. Kotlin 2.0+ uses Compose Compiler Gradle plugin directly (no separate kotlinCompilerExtensionVersion needed). BOM 2026.04.00 maps to Compose 1.11.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-06-17T19:38:55.528Z","ttl":86400000,"kind":"web"}
