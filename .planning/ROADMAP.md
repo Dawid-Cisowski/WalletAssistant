@@ -33,10 +33,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `local.properties` is listed in `.gitignore` from the first commit
   4. `HmacSigningInterceptor` is wired into `OkHttpClient` and signs every outgoing request automatically
 
-**Plans**: 2 plans
+**Plans**: 1/2 plans executed
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Project scaffold + BuildConfig secret injection + secret-safe git baseline (AUTH-02)
+- [x] 01-01-PLAN.md — Project scaffold + BuildConfig secret injection + secret-safe git baseline (AUTH-02)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Android Foundation | 0/2 | Not started | - |
+| 1. Android Foundation | 1/2 | In Progress|  |
 | 2. Expenses Screen | 0/TBD | Not started | - |
 | 3. Accounts + Investments Screens | 0/TBD | Not started | - |
 | 4. Navigation Shell + Polish | 0/TBD | Not started | - |
