@@ -14,7 +14,7 @@ New Android app (Kotlin + Jetpack Compose) that gives read-only access to the ex
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Android Foundation** - New Android project with HMAC auth, OkHttp interceptor, Retrofit networking — verified against real backend (completed 2026-06-17)
-- [ ] **Phase 2: Expenses Screen** - Full expenses feature: reverse-chron list, date range picker, category filter chips, total spend card
+- [x] **Phase 2: Expenses Screen** - Full expenses feature: reverse-chron list, date range picker, category filter chips, total spend card (completed 2026-06-18)
 - [ ] **Phase 3: Accounts + Investments Screens** - Account balances + history and investment portfolio views using the established MVVM pattern
 - [ ] **Phase 4: Navigation Shell + Polish** - Bottom nav bar wiring all screens, pull-to-refresh, loading/error/empty states, Polish currency formatting
 
@@ -57,14 +57,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can tap category filter chips to narrow expenses; multiple chips can be active at once
   4. A summary card shows the total amount spent for the currently selected period and filters
 
-**Plans**: 2 plans
+**Plans**: 2/2 plans complete
 **Wave 1**
 
 - [x] 02-01-PLAN.md — Compose + Hilt + KSP infra and end-to-end "this month's expenses" list with total card (EXP-01)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Date range picker + 13-category multi-select filters + recomputed total + loading/error/empty states (EXP-02, EXP-03, EXP-04)
+- [x] 02-02-PLAN.md — Date range picker + 13-category multi-select filters + recomputed total + loading/error/empty states (EXP-02, EXP-03, EXP-04)
 
 **UI hint**: yes
 
@@ -108,6 +108,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Android Foundation | 2/2 | Complete    | 2026-06-17 |
-| 2. Expenses Screen | 1/2 | In progress | - |
+| 2. Expenses Screen | 2/2 | Complete   | 2026-06-18 |
 | 3. Accounts + Investments Screens | 0/TBD | Not started | - |
 | 4. Navigation Shell + Polish | 0/TBD | Not started | - |
