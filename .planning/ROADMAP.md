@@ -108,6 +108,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Android Foundation | 2/2 | Complete    | 2026-06-17 |
-| 2. Expenses Screen | 2/2 | Complete   | 2026-06-18 |
+| 2. Expenses Screen | 2/2 | Complete    | 2026-06-18 |
 | 3. Accounts + Investments Screens | 0/TBD | Not started | - |
 | 4. Navigation Shell + Polish | 0/TBD | Not started | - |

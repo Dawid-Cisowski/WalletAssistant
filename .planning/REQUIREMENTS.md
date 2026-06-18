@@ -12,7 +12,7 @@
 
 ### Expenses
 
-- [ ] **EXP-01**: Użytkownik widzi listę wydatków w odwrotnej kolejności chronologicznej z domyślnym bieżącym miesiącem
+- [x] **EXP-01**: Użytkownik widzi listę wydatków w odwrotnej kolejności chronologicznej z domyślnym bieżącym miesiącem
 - [x] **EXP-02**: Użytkownik może wybrać zakres dat (date range picker)
 - [x] **EXP-03**: Użytkownik może filtrować wydatki według kategorii (chip filtry: FOOD_AND_DRINKS, TRANSPORT, SHOPPING, ENTERTAINMENT, SUBSCRIPTIONS, HEALTH, HOUSING, UTILITIES, EDUCATION, TRAVEL, BUSINESS, OTHER)
 - [x] **EXP-04**: Użytkownik widzi kartę z łączną sumą wydatków dla wybranego okresu
@@ -73,7 +73,7 @@
 |-------------|-------|--------|
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| EXP-01 | Phase 2 | Pending |
+| EXP-01 | Phase 2 | Complete |
 | EXP-02 | Phase 2 | Complete |
 | EXP-03 | Phase 2 | Complete |
 | EXP-04 | Phase 2 | Complete |
