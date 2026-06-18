@@ -57,9 +57,9 @@ class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        request.setAttribute(DEVICE_ID_ATTRIBUTE, appProperties.getApiKey().getDeviceId());
-        log.debug("API key authentication succeeded for device {}",
-                SecurityUtils.maskDeviceId(appProperties.getApiKey().getDeviceId()));
+        var deviceId = appProperties.getApiKey().getDeviceId();
+        request.setAttribute(DEVICE_ID_ATTRIBUTE, deviceId);
+        log.debug("API key authentication succeeded for device {}", SecurityUtils.maskDeviceId(deviceId));
         filterChain.doFilter(request, response);
     }
 
@@ -116,4 +116,5 @@ class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         objectMapper.writeValue(response.getWriter(),
                 new ErrorResponse("API_KEY_AUTH_FAILED", "Invalid authentication credentials"));
     }
+
 }

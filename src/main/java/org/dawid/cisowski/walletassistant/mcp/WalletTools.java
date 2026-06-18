@@ -184,6 +184,6 @@ class WalletTools {
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
                 .filter(s -> !s.isBlank())
-                .orElse(appProperties.getApiKey().getDeviceId());
+                .orElseGet(() -> appProperties.getApiKey().getDeviceId());
     }
 }
