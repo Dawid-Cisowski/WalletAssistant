@@ -57,7 +57,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can tap category filter chips to narrow expenses; multiple chips can be active at once
   4. A summary card shows the total amount spent for the currently selected period and filters
 
-**Plans**: TBD
+**Plans**: 2 plans
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Compose + Hilt + KSP infra and end-to-end "this month's expenses" list with total card (EXP-01)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Date range picker + 13-category multi-select filters + recomputed total + loading/error/empty states (EXP-02, EXP-03, EXP-04)
+
 **UI hint**: yes
 
 ### Phase 3: Accounts + Investments Screens
@@ -100,6 +108,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Android Foundation | 2/2 | Complete    | 2026-06-17 |
-| 2. Expenses Screen | 0/TBD | Not started | - |
+| 2. Expenses Screen | 0/2 | Not started | - |
 | 3. Accounts + Investments Screens | 0/TBD | Not started | - |
 | 4. Navigation Shell + Polish | 0/TBD | Not started | - |
