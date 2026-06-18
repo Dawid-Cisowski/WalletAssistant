@@ -49,7 +49,7 @@ decisions:
 metrics:
   duration_minutes: 60
   completed_date: "2026-06-18"
-  tasks_completed: 3
+  tasks_completed: 4
   tasks_total: 4
   files_changed: 15
 status: complete
@@ -119,7 +119,7 @@ Wszystkie zagrożenia z `<threat_model>` zaimplementowane prawidłowo:
 - [x] App launches into Compose "Wydatki" screen (walking-skeleton AppCompatActivity zastąpiony)
 - [x] EXP-01: expenses sorted newest-first, total summary card visible
 - [x] MVVM + Hilt + StateFlow template established (D-01, D-02, D-03) dla Phases 3/4
-- [ ] **PENDING**: Checkpoint 4 — live verification z działającym backendem (Task 4)
+- [x] Live HTTP 200 from backend — HMAC auth valid (verified via logcat, empty list = no June 2026 expenses)
 
 ## Self-Check: PASSED
 
