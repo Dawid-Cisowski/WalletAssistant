@@ -5,8 +5,8 @@ milestone_name: milestone
 current_phase: 01
 current_phase_name: android-foundation
 status: verifying
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-06-17T21:07:49.533Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-06-18T11:48:53.481Z"
 last_activity: 2026-06-17
 last_activity_desc: Phase 01 execution started
 progress:
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01 P01 | 2 | 2 tasks | 12 files |
+| Phase 01 P02 | 120 | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,10 @@ Recent decisions affecting current work:
 - [Phase ?]: Kotlin DSL used for all build scripts per D-03 — diverges from HealthAssistant Groovy DSL
 - [Phase ?]: No product flavors (D-04) — single debug/release build types; buildConfigField injected in both
 - [Phase ?]: local.properties .gitignored from first commit (D-06) — satisfies AUTH-02, T-01-01
+- [Phase ?]: Device ID read from Settings.Secure.ANDROID_ID at runtime
+- [Phase ?]: BACKEND_URL guard in NetworkModule throws IllegalStateException when local.properties not populated
+- [Phase ?]: HmacSigningInterceptor: addInterceptor (Application) not addNetworkInterceptor — signed headers appear in BODY debug logs
+- [Phase ?]: Walking Skeleton verified: Android HMAC-signed GET /v1/expenses returns HTTP 200 from WalletAssistant backend
 
 ### Pending Todos
 
@@ -89,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-17T21:07:35.507Z
-Stopped at: Completed 01-01-PLAN.md
-Resume file: .planning/phases/01-android-foundation/01-02-PLAN.md
+Last session: 2026-06-18T11:48:53.474Z
+Stopped at: Completed 01-02-PLAN.md
+Resume file: None
