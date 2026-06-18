@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 2
-current_phase_name: Expenses Screen
-status: verifying
+current_phase: 02
+current_phase_name: expenses-screen
+status: executing
 stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-06-18T12:12:48.578Z"
+last_updated: "2026-06-18T00:00:00.000Z"
 last_activity: 2026-06-18
-last_activity_desc: Phase 01 complete, transitioned to Phase 2
+last_activity_desc: Phase 02 Plan 01 complete — HTTP 200 HMAC checkpoint verified
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 2
+  total_plans: 4
   completed_plans: 2
   percent: 25
 ---
@@ -24,14 +24,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-17)
 
 **Core value:** Zawsze aktualny, zsynchronizowany obraz osobistych finansów — dostępny na telefonie Android
-**Current focus:** Phase 01 — android-foundation
+**Current focus:** Phase 02 — expenses-screen
 
 ## Current Position
 
-Phase: 2 — Expenses Screen
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-06-18 — Phase 01 complete, transitioned to Phase 2
+Phase: 02 (expenses-screen) — EXECUTING
+Plan: 2 of 2
+Status: Plan 01 complete — Plan 02 pending
+Last activity: 2026-06-18 — Plan 01 complete (HMAC checkpoint verified)
 
 Progress: [░░░░░░░░░░] 0%
 
