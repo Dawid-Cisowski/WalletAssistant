@@ -1,5 +1,10 @@
 package org.dawid.cisowski.walletassistant.assets;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.dawid.cisowski.walletassistant.assets.api.AssetPositionResponse;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Assets", description = "Query asset positions, portfolio P&L and price history")
 @RestController
 @RequestMapping("/v1/assets")
 @RequiredArgsConstructor
@@ -24,6 +30,14 @@ class AssetsController {
 
     private final AssetsFacade assetsFacade;
 
+    @Operation(
+            summary = "Portfolio summary",
+            description = "All open positions grouped by portfolio type (IKE/PERSONAL) with current value, gain/loss and totals. currentPrice/currentValue/gainLoss are null when no price snapshot exists for the symbol."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Portfolio summary with P&L"),
+            @ApiResponse(responseCode = "401", description = "Missing or invalid authentication")
+    })
     @GetMapping("/portfolio")
     ResponseEntity<PortfolioSummaryResponse> getPortfolio(HttpServletRequest request) {
         return authenticated(request)
@@ -31,8 +45,14 @@ class AssetsController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    @Operation(summary = "List positions by status", description = "Returns OPEN or CLOSED positions. Defaults to OPEN.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "List of asset positions"),
+            @ApiResponse(responseCode = "401", description = "Missing or invalid authentication")
+    })
     @GetMapping("/positions")
     ResponseEntity<List<AssetPositionResponse>> getPositions(
+            @Parameter(description = "Position status filter: OPEN or CLOSED", example = "OPEN")
             @RequestParam(defaultValue = "OPEN") String status,
             HttpServletRequest request
     ) {
@@ -41,8 +61,14 @@ class AssetsController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    @Operation(summary = "Price history for an asset symbol", description = "All recorded price snapshots for a given symbol, newest first. Used for charts.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Price history ordered by date descending"),
+            @ApiResponse(responseCode = "401", description = "Missing or invalid authentication")
+    })
     @GetMapping("/{assetSymbol}/prices")
     ResponseEntity<List<AssetPriceResponse>> getPriceHistory(
+            @Parameter(description = "Asset symbol, e.g. XAU, BTC, PKNORLEN", example = "XAU")
             @PathVariable String assetSymbol,
             HttpServletRequest request
     ) {
