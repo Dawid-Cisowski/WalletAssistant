@@ -76,6 +76,7 @@ jobs:
             --set-secrets "SPRING_DATASOURCE_PASSWORD=db-password:latest" \
             --set-secrets "HMAC_DEVICES_JSON=hmac-devices-json:latest" \
             --set-secrets "API_KEY=api-key:latest" \
+            --remove-secrets "API_KEY_DEVICE_ID" \
             --set-env-vars "API_KEY_ENABLED=true" \
             --set-env-vars "API_KEY_DEVICE_ID=claude-ai" \
             --set-env-vars "MCP_ENABLED=true" \
