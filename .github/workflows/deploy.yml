@@ -84,6 +84,7 @@ jobs:
             --set-env-vars "API_KEY_ENABLED=true" \
             --set-env-vars "API_KEY_DEVICE_ID=claude-ai" \
             --set-env-vars "MCP_ENABLED=true" \
+            --set-env-vars "SPRING_FLYWAY_IGNORE_MIGRATION_PATTERNS=*:missing" \
             --quiet
 
           # Fetch the actual Cloud Run URL and set MCP_BASE_URL
