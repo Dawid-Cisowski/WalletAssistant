@@ -35,7 +35,7 @@ class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     private static final String DEVICE_ID_ATTRIBUTE = "deviceId";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final Set<String> PROTECTED_PATHS = Set.of(
-            "/v1/wallet-events", "/v1/expenses", "/v1/accounts", "/v1/investments", "/sse", "/mcp");
+            "/v1/wallet-events", "/v1/expenses", "/v1/accounts", "/v1/assets", "/sse", "/mcp");
 
     private final AppProperties appProperties;
     private final ObjectMapper objectMapper;

@@ -33,7 +33,7 @@ class HmacAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String DEVICE_ID_ATTRIBUTE = "deviceId";
     private static final Set<String> PROTECTED_PATHS = Set.of(
-            "/v1/wallet-events", "/v1/expenses", "/v1/accounts", "/v1/investments", "/sse", "/mcp");
+            "/v1/wallet-events", "/v1/expenses", "/v1/accounts", "/v1/assets", "/sse", "/mcp");
     private static final Set<String> BODY_METHODS = Set.of("POST", "PUT", "PATCH");
 
     private final DeviceSecretProvider deviceSecretProvider;

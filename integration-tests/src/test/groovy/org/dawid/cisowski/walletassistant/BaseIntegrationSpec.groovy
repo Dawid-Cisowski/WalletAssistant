@@ -52,7 +52,7 @@ abstract class BaseIntegrationSpec extends Specification {
 
         // All device IDs used by test classes (all share base64 secret "test-secret-123",
         // except different-device-id which uses "different-secret-123").
-        def devicesJson = """{"test-device":"dGVzdC1zZWNyZXQtMTIz","different-device-id":"ZGlmZmVyZW50LXNlY3JldC0xMjM=","test-expenses":"dGVzdC1zZWNyZXQtMTIz","test-accounts":"dGVzdC1zZWNyZXQtMTIz","test-investments":"dGVzdC1zZWNyZXQtMTIz"}"""
+        def devicesJson = """{"test-device":"dGVzdC1zZWNyZXQtMTIz","different-device-id":"ZGlmZmVyZW50LXNlY3JldC0xMjM=","test-expenses":"dGVzdC1zZWNyZXQtMTIz","test-accounts":"dGVzdC1zZWNyZXQtMTIz","test-investments":"dGVzdC1zZWNyZXQtMTIz","test-assets":"dGVzdC1zZWNyZXQtMTIz"}"""
         System.setProperty("HMAC_DEVICES_JSON", devicesJson)
         System.setProperty("HMAC_TOLERANCE_SEC", "600")
     }

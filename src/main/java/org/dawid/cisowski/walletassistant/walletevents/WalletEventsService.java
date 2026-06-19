@@ -3,9 +3,9 @@ package org.dawid.cisowski.walletassistant.walletevents;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dawid.cisowski.walletassistant.walletevents.api.AccountSnapshotsStoredEvent;
+import org.dawid.cisowski.walletassistant.walletevents.api.AssetsStoredEvent;
 import org.dawid.cisowski.walletassistant.walletevents.api.EventType;
 import org.dawid.cisowski.walletassistant.walletevents.api.ExpensesStoredEvent;
-import org.dawid.cisowski.walletassistant.walletevents.api.InvestmentSnapshotsStoredEvent;
 import org.dawid.cisowski.walletassistant.walletevents.api.StoredEventData;
 import org.dawid.cisowski.walletassistant.walletevents.api.WalletEventsFacade;
 import org.springframework.context.ApplicationEventPublisher;
@@ -104,14 +104,25 @@ class WalletEventsService implements WalletEventsFacade {
                 .filter(events -> !events.isEmpty())
                 .ifPresent(events -> eventPublisher.publishEvent(new AccountSnapshotsStoredEvent(events)));
 
-        Optional.ofNullable(grouped.get(EventType.INVESTMENT_SNAPSHOT_RECORDED))
-                .filter(events -> !events.isEmpty())
-                .ifPresent(events -> eventPublisher.publishEvent(new InvestmentSnapshotsStoredEvent(events)));
+        var assets = grouped.entrySet().stream()
+                .filter(entry -> isAssetType(entry.getKey()))
+                .flatMap(entry -> entry.getValue().stream())
+                .toList();
+        if (!assets.isEmpty()) {
+            eventPublisher.publishEvent(new AssetsStoredEvent(assets));
+        }
     }
 
     private boolean isExpenseType(EventType eventType) {
         return switch (eventType) {
             case EXPENSE_RECORDED, EXPENSE_CORRECTED, EXPENSE_DELETED -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isAssetType(EventType eventType) {
+        return switch (eventType) {
+            case ASSET_POSITION_OPENED, ASSET_POSITION_CLOSED, ASSET_PRICE_SNAPSHOT_RECORDED -> true;
             default -> false;
         };
     }

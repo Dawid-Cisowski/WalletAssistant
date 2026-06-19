@@ -1,16 +1,16 @@
-package org.dawid.cisowski.walletassistant.investments.api;
+package org.dawid.cisowski.walletassistant.assets.api;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public record PortfolioSummaryResponse(
-        BigDecimal totalValue,
+        BigDecimal totalCurrentValue,
         BigDecimal totalInvested,
         BigDecimal totalGainLoss,
         BigDecimal totalGainLossPercent,
-        List<InvestmentResponse> investments,
         String currency,
-        LocalDate asOf
+        LocalDate asOf,
+        List<PortfolioGroupResponse> portfolios
 ) {
 }

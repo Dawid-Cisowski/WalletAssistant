@@ -23,7 +23,7 @@ class ModularityTests {
     @Test
     void shouldDetectAllExpectedModules() {
         var expectedModules = Set.of(
-                "walletevents", "expenses", "accounts", "investments",
+                "walletevents", "expenses", "accounts", "assets",
                 "mcp", "config", "security"
         );
 
@@ -43,7 +43,7 @@ class ModularityTests {
 
     @Test
     void walletEventsShouldNotDependOnProjectionModules() {
-        var projectionModules = Set.of("expenses", "accounts", "investments");
+        var projectionModules = Set.of("expenses", "accounts", "assets");
 
         var module = modules.getModuleByName("walletevents").orElseThrow();
         var dependencies = module.getBootstrapDependencies(modules)
@@ -61,7 +61,7 @@ class ModularityTests {
                 "walletevents", "WalletEventsFacade",
                 "expenses", "ExpensesFacade",
                 "accounts", "AccountsFacade",
-                "investments", "InvestmentsFacade"
+                "assets", "AssetsFacade"
         );
 
         modulesWithFacades.forEach((moduleName, facadeName) -> {

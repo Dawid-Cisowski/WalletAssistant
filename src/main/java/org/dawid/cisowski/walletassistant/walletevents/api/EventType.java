@@ -8,7 +8,9 @@ public enum EventType {
     EXPENSE_CORRECTED("ExpenseCorrected.v1"),
     EXPENSE_DELETED("ExpenseDeleted.v1"),
     ACCOUNT_BALANCE_SNAPSHOT_RECORDED("AccountBalanceSnapshotRecorded.v1"),
-    INVESTMENT_SNAPSHOT_RECORDED("InvestmentSnapshotRecorded.v1");
+    ASSET_POSITION_OPENED("AssetPositionOpened.v1"),
+    ASSET_POSITION_CLOSED("AssetPositionClosed.v1"),
+    ASSET_PRICE_SNAPSHOT_RECORDED("AssetPriceSnapshotRecorded.v1");
 
     private final String typeName;
 

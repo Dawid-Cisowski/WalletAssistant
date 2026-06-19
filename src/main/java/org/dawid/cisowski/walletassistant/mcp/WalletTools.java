@@ -8,8 +8,8 @@ import org.dawid.cisowski.walletassistant.config.AppProperties;
 import org.dawid.cisowski.walletassistant.expenses.api.ExpenseResponse;
 import org.dawid.cisowski.walletassistant.expenses.api.ExpensesFacade;
 import org.dawid.cisowski.walletassistant.expenses.api.MonthlyExpenseSummaryResponse;
-import org.dawid.cisowski.walletassistant.investments.api.InvestmentsFacade;
-import org.dawid.cisowski.walletassistant.investments.api.PortfolioSummaryResponse;
+import org.dawid.cisowski.walletassistant.assets.api.AssetsFacade;
+import org.dawid.cisowski.walletassistant.assets.api.PortfolioSummaryResponse;
 import org.dawid.cisowski.walletassistant.walletevents.api.WalletEventsFacade;
 import org.dawid.cisowski.walletassistant.walletevents.api.WalletEventsFacade.EventEnvelope;
 import org.dawid.cisowski.walletassistant.walletevents.api.WalletEventsFacade.StoreEventsCommand;
@@ -41,7 +41,7 @@ class WalletTools {
 
     private final ExpensesFacade expensesFacade;
     private final AccountsFacade accountsFacade;
-    private final InvestmentsFacade investmentsFacade;
+    private final AssetsFacade assetsFacade;
     private final WalletEventsFacade walletEventsFacade;
     private final AppProperties appProperties;
 
@@ -117,33 +117,84 @@ class WalletTools {
         return accountsFacade.getCurrentBalances(getDeviceId(toolContext));
     }
 
-    @Tool(description = "Record investment portfolio snapshot. Investment type must be one of: IKE, XTB_STOCKS, XTB_ETF, SAVINGS_ACCOUNT, CRYPTO, OTHER.")
-    String recordInvestmentSnapshot(
-            @ToolParam(description = "Investment type enum name") String investmentType,
-            @ToolParam(description = "Human-readable investment name") String investmentName,
-            @ToolParam(description = "Current market value") BigDecimal currentValue,
-            @ToolParam(description = "Total invested amount", required = false) BigDecimal investedAmount,
+    @Tool(description = """
+            Open an asset position (record a purchase). \
+            portfolioType: IKE | PERSONAL. \
+            assetType: STOCK | ETF | GOLD | CRYPTO | OTHER. \
+            assetSymbol: ticker or short code, e.g. PKNORLEN, XAU, BTC.""")
+    String openAssetPosition(
+            @ToolParam(description = "Portfolio type: IKE or PERSONAL") String portfolioType,
+            @ToolParam(description = "Asset symbol, e.g. XAU, BTC, PKNORLEN") String assetSymbol,
+            @ToolParam(description = "Asset type: STOCK | ETF | GOLD | CRYPTO | OTHER") String assetType,
+            @ToolParam(description = "Human-readable asset name, e.g. Złoto, Bitcoin") String assetName,
+            @ToolParam(description = "Quantity purchased (supports up to 8 decimal places)") BigDecimal quantity,
+            @ToolParam(description = "Purchase price per unit") BigDecimal purchasePrice,
             @ToolParam(description = "ISO 4217 currency code, e.g. PLN") String currency,
-            @ToolParam(description = "Date in ISO format YYYY-MM-DD") String date,
+            @ToolParam(description = "Purchase date in ISO format YYYY-MM-DD") String purchaseDate,
             ToolContext toolContext
     ) {
-        var occurredAt = toInstant(date, null);
+        var occurredAt = toInstant(purchaseDate, null);
         var payload = new HashMap<String, Object>();
-        payload.put("investmentType", investmentType);
-        payload.put("investmentName", investmentName);
-        payload.put("currentValue", currentValue.toPlainString());
-        payload.put("investedAmount", Optional.ofNullable(investedAmount).map(BigDecimal::toPlainString).orElse(null));
+        payload.put("positionId", UUID.randomUUID().toString());
+        payload.put("portfolioType", portfolioType);
+        payload.put("assetSymbol", assetSymbol.toUpperCase());
+        payload.put("assetType", assetType);
+        payload.put("assetName", assetName);
+        payload.put("quantity", quantity.toPlainString());
+        payload.put("purchasePrice", purchasePrice.toPlainString());
         payload.put("currency", normalizedCurrency(currency));
-        payload.put("date", date);
+        payload.put("purchaseDate", purchaseDate);
 
-        var result = store("InvestmentSnapshotRecorded.v1", occurredAt, payload, getDeviceId(toolContext));
-        return confirmation(result, "Investment snapshot recorded for %s: %s %s".formatted(
-                investmentName, currentValue.toPlainString(), normalizedCurrency(currency)));
+        var result = store("AssetPositionOpened.v1", occurredAt, payload, getDeviceId(toolContext));
+        return confirmation(result, "Position opened: %s x%s @ %s %s".formatted(
+                assetName, quantity.toPlainString(), purchasePrice.toPlainString(), normalizedCurrency(currency)));
     }
 
-    @Tool(description = "Get current investment portfolio summary with total value and gain/loss.")
+    @Tool(description = "Close an asset position (record a sale). Supports partial close — quantity can be less than original.")
+    String closeAssetPosition(
+            @ToolParam(description = "positionId of the open position being closed") String openPositionId,
+            @ToolParam(description = "Quantity being sold") BigDecimal quantity,
+            @ToolParam(description = "Sale price per unit") BigDecimal salePrice,
+            @ToolParam(description = "ISO 4217 currency code, e.g. PLN") String currency,
+            @ToolParam(description = "Sale date in ISO format YYYY-MM-DD") String saleDate,
+            ToolContext toolContext
+    ) {
+        var occurredAt = toInstant(saleDate, null);
+        var payload = new HashMap<String, Object>();
+        payload.put("openPositionId", openPositionId);
+        payload.put("quantity", quantity.toPlainString());
+        payload.put("salePrice", salePrice.toPlainString());
+        payload.put("currency", normalizedCurrency(currency));
+        payload.put("saleDate", saleDate);
+
+        var result = store("AssetPositionClosed.v1", occurredAt, payload, getDeviceId(toolContext));
+        return confirmation(result, "Position closed: %s units @ %s %s".formatted(
+                quantity.toPlainString(), salePrice.toPlainString(), normalizedCurrency(currency)));
+    }
+
+    @Tool(description = "Record a price snapshot for an asset symbol. Used for P&L calculation and charts.")
+    String recordAssetPrice(
+            @ToolParam(description = "Asset symbol, e.g. XAU, BTC, PKNORLEN") String assetSymbol,
+            @ToolParam(description = "Current price per unit") BigDecimal price,
+            @ToolParam(description = "ISO 4217 currency code, e.g. PLN") String currency,
+            @ToolParam(description = "Price date in ISO format YYYY-MM-DD") String priceDate,
+            ToolContext toolContext
+    ) {
+        var occurredAt = toInstant(priceDate, null);
+        var payload = new HashMap<String, Object>();
+        payload.put("assetSymbol", assetSymbol.toUpperCase());
+        payload.put("price", price.toPlainString());
+        payload.put("currency", normalizedCurrency(currency));
+        payload.put("priceDate", priceDate);
+
+        var result = store("AssetPriceSnapshotRecorded.v1", occurredAt, payload, getDeviceId(toolContext));
+        return confirmation(result, "Price recorded for %s: %s %s".formatted(
+                assetSymbol.toUpperCase(), price.toPlainString(), normalizedCurrency(currency)));
+    }
+
+    @Tool(description = "Get portfolio summary: all open positions with current value, P&L per position and totals per portfolio type (IKE/PERSONAL).")
     PortfolioSummaryResponse getPortfolioSummary(ToolContext toolContext) {
-        return investmentsFacade.getPortfolioSummary(getDeviceId(toolContext));
+        return assetsFacade.getPortfolioSummary(getDeviceId(toolContext));
     }
 
     private StoreEventsResult store(String eventType, Instant occurredAt, Map<String, Object> payload, String userId) {
