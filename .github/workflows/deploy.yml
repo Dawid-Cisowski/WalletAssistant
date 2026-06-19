@@ -73,9 +73,7 @@ jobs:
             --set-env-vars "SPRING_PROFILES_ACTIVE=production" \
             --set-env-vars "SPRING_DATASOURCE_URL=$JDBC_URL" \
             --set-env-vars "SPRING_DATASOURCE_USERNAME=wallet" \
-            --set-secrets "SPRING_DATASOURCE_PASSWORD=db-password:latest" \
-            --set-secrets "HMAC_DEVICES_JSON=hmac-devices-json:latest" \
-            --set-secrets "API_KEY=api-key:latest" \
+            --update-secrets "SPRING_DATASOURCE_PASSWORD=db-password:latest,HMAC_DEVICES_JSON=hmac-devices-json:latest,API_KEY=api-key:latest" \
             --remove-secrets "API_KEY_DEVICE_ID" \
             --set-env-vars "API_KEY_ENABLED=true" \
             --set-env-vars "API_KEY_DEVICE_ID=claude-ai" \
