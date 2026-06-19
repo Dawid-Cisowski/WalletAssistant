@@ -54,6 +54,13 @@ jobs:
 
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
+      - name: Pre-clean conflicting secret bindings
+        run: |
+          gcloud run services update ${{ env.CLOUD_RUN_SERVICE }} \
+            --region ${{ env.GCP_REGION }} \
+            --remove-secrets "API_KEY_DEVICE_ID" \
+            --quiet 2>/dev/null || true
+
       - name: Deploy to Cloud Run
         run: |
           CLOUDSQL_INSTANCE="${{ env.GCP_PROJECT_ID }}:${{ env.GCP_REGION }}:app-db"
@@ -74,7 +81,6 @@ jobs:
             --set-env-vars "SPRING_DATASOURCE_URL=$JDBC_URL" \
             --set-env-vars "SPRING_DATASOURCE_USERNAME=wallet" \
             --update-secrets "SPRING_DATASOURCE_PASSWORD=db-password:latest,HMAC_DEVICES_JSON=hmac-devices-json:latest,API_KEY=api-key:latest" \
-            --remove-secrets "API_KEY_DEVICE_ID" \
             --set-env-vars "API_KEY_ENABLED=true" \
             --set-env-vars "API_KEY_DEVICE_ID=claude-ai" \
             --set-env-vars "MCP_ENABLED=true" \
