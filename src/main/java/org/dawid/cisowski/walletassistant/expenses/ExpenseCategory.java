@@ -4,18 +4,16 @@ import java.util.Arrays;
 
 public enum ExpenseCategory {
 
-    FOOD_AND_DRINKS("Jedzenie i napoje"),
+    DINING_OUT("Jedzenie na mieście"),
+    GROCERIES("Zakupy spożywcze"),
     TRANSPORT("Transport"),
-    SHOPPING("Zakupy"),
+    HOME_SUPPLIES("Artykuły domowe"),
     ENTERTAINMENT("Rozrywka"),
     SUBSCRIPTIONS("Subskrypcje"),
     HEALTH("Zdrowie"),
-    HOUSING("Mieszkanie"),
-    UTILITIES("Media"),
     EDUCATION("Edukacja"),
-    TRAVEL("Podróże"),
-    BUSINESS("Firmowe"),
-    SAVINGS_TRANSFER("Transfer na oszczędności"),
+    KIDS_TOYS("Zabawki dla dzieci"),
+    CLOTHING("Odzież"),
     OTHER("Inne");
 
     private final String displayName;
@@ -33,6 +31,6 @@ public enum ExpenseCategory {
                 .filter(category -> category.name().equalsIgnoreCase(value)
                         || category.displayName.equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown expense category: " + value));
+                .orElse(OTHER);
     }
 }

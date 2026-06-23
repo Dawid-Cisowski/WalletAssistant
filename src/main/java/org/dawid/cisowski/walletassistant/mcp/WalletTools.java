@@ -45,7 +45,7 @@ class WalletTools {
     private final WalletEventsFacade walletEventsFacade;
     private final AppProperties appProperties;
 
-    @Tool(description = "Record an expense. Category must be one of: FOOD_AND_DRINKS, TRANSPORT, SHOPPING, ENTERTAINMENT, SUBSCRIPTIONS, HEALTH, HOUSING, UTILITIES, EDUCATION, TRAVEL, BUSINESS, OTHER. Account type must be one of: BUSINESS, PERSONAL_SAVINGS, PERSONAL_SPENDING.")
+    @Tool(description = "Record an expense. Category must be one of: DINING_OUT (restaurants, takeaway), GROCERIES (food bought for home), TRANSPORT (fuel, parking, tickets, car), HOME_SUPPLIES (cleaning products, toilet paper, household items), ENTERTAINMENT, SUBSCRIPTIONS (Netflix, YouTube etc.), HEALTH (doctors, medicine, tests), EDUCATION (courses, books), KIDS_TOYS, CLOTHING, OTHER. Account type must be one of: BUSINESS, PERSONAL_SAVINGS, PERSONAL_SPENDING.")
     String recordExpense(
             @ToolParam(description = "Short human-readable description of the expense") String description,
             @ToolParam(description = "Expense amount, positive number") BigDecimal amount,
@@ -88,6 +88,47 @@ class WalletTools {
             ToolContext toolContext
     ) {
         return expensesFacade.getMonthlySummary(getDeviceId(toolContext), year, month);
+    }
+
+    @Tool(description = "Correct an existing expense. Provide the expenseId of the expense to update (get it from getExpenses), then supply all fields with corrected values — all fields will be overwritten. Category must be one of: DINING_OUT (restaurants, takeaway), GROCERIES (food bought for home), TRANSPORT (fuel, parking, tickets, car), HOME_SUPPLIES (cleaning products, toilet paper, household items), ENTERTAINMENT, SUBSCRIPTIONS (Netflix, YouTube etc.), HEALTH (doctors, medicine, tests), EDUCATION (courses, books), KIDS_TOYS, CLOTHING, OTHER. Account type must be one of: BUSINESS, PERSONAL_SAVINGS, PERSONAL_SPENDING.")
+    String correctExpense(
+            @ToolParam(description = "expenseId of the expense to correct (from getExpenses)") String expenseId,
+            @ToolParam(description = "Short human-readable description of the expense") String description,
+            @ToolParam(description = "Corrected amount, positive number") BigDecimal amount,
+            @ToolParam(description = "ISO 4217 currency code, e.g. PLN") String currency,
+            @ToolParam(description = "Expense category enum name") String category,
+            @ToolParam(description = "Merchant or vendor name", required = false) String merchant,
+            @ToolParam(description = "Account type enum name") String accountType,
+            @ToolParam(description = "Date in ISO format YYYY-MM-DD") String date,
+            @ToolParam(description = "Time in ISO format HH:mm, optional", required = false) String time,
+            ToolContext toolContext
+    ) {
+        var occurredAt = toInstant(date, time);
+        var payload = new HashMap<String, Object>();
+        payload.put("expenseId", expenseId);
+        payload.put("amount", amount.toPlainString());
+        payload.put("currency", normalizedCurrency(currency));
+        payload.put("category", category);
+        payload.put("description", description);
+        payload.put("merchant", merchant);
+        payload.put("accountType", accountType);
+        payload.put("date", date);
+
+        var result = store("ExpenseCorrected.v1", occurredAt, payload, getDeviceId(toolContext));
+        return confirmation(result, "Expense corrected: %s %s for %s".formatted(
+                amount.toPlainString(), normalizedCurrency(currency), description));
+    }
+
+    @Tool(description = "Delete an expense by its expenseId. Get the expenseId from getExpenses. This action cannot be undone.")
+    String deleteExpense(
+            @ToolParam(description = "expenseId of the expense to delete (from getExpenses)") String expenseId,
+            ToolContext toolContext
+    ) {
+        var payload = new HashMap<String, Object>();
+        payload.put("expenseId", expenseId);
+
+        var result = store("ExpenseDeleted.v1", Instant.now(), payload, getDeviceId(toolContext));
+        return confirmation(result, "Expense deleted (expenseId=" + expenseId + ")");
     }
 
     @Tool(description = "Record current account balance snapshot. Account type must be one of: BUSINESS, PERSONAL_SAVINGS, PERSONAL_SPENDING.")

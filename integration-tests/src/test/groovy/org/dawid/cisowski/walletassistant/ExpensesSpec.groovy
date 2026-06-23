@@ -20,7 +20,7 @@ class ExpensesSpec extends BaseIntegrationSpec {
                 expenseId  : UUID.randomUUID().toString(),
                 amount     : 26.00,
                 currency   : "PLN",
-                category   : "FOOD_AND_DRINKS",
+                category   : "DINING_OUT",
                 description: "Kebab",
                 merchant   : "Kebab Shop",
                 accountType: "PERSONAL_SPENDING",
@@ -43,7 +43,7 @@ class ExpensesSpec extends BaseIntegrationSpec {
         given: "an EXPENSE_RECORDED event for a kebab"
         submitExpense(DEVICE_ID, SECRET, [
                 amount     : 26.00,
-                category   : "FOOD_AND_DRINKS",
+                category   : "DINING_OUT",
                 accountType: "PERSONAL_SPENDING",
                 occurredAt : "2026-06-10T12:00:00Z"
         ])
@@ -59,7 +59,7 @@ class ExpensesSpec extends BaseIntegrationSpec {
         def expenses = response.jsonPath().getList("")
         expenses.size() == 1
         response.jsonPath().getDouble("[0].amount") == 26.0
-        response.jsonPath().getString("[0].category") == "FOOD_AND_DRINKS"
+        response.jsonPath().getString("[0].category") == "DINING_OUT"
     }
 
     def "submitting duplicate idempotencyKey returns DUPLICATE status"() {
@@ -101,9 +101,9 @@ class ExpensesSpec extends BaseIntegrationSpec {
 
     def "monthly summary aggregates expenses by category"() {
         given: "three expenses across two categories in June 2026"
-        submitExpense(DEVICE_ID, SECRET, [amount: 26.00, category: "FOOD_AND_DRINKS", description: "Kebab", occurredAt: "2026-06-10T12:00:00Z"])
+        submitExpense(DEVICE_ID, SECRET, [amount: 26.00, category: "DINING_OUT", description: "Kebab", occurredAt: "2026-06-10T12:00:00Z"])
         submitExpense(DEVICE_ID, SECRET, [amount: 50.00, category: "SUBSCRIPTIONS", description: "Netflix", occurredAt: "2026-06-11T12:00:00Z"])
-        submitExpense(DEVICE_ID, SECRET, [amount: 30.00, category: "FOOD_AND_DRINKS", description: "Burger", occurredAt: "2026-06-12T12:00:00Z"])
+        submitExpense(DEVICE_ID, SECRET, [amount: 30.00, category: "DINING_OUT", description: "Burger", occurredAt: "2026-06-12T12:00:00Z"])
 
         and: "all three projections are applied"
         awaitProjection { getExpenses("2026-06-01", "2026-06-30").jsonPath().getList("").size() == 3 }
@@ -116,7 +116,7 @@ class ExpensesSpec extends BaseIntegrationSpec {
         response.statusCode() == 200
         def json = response.jsonPath()
         json.getInt("transactionCount") == 3
-        categoryTotal(json, "FOOD_AND_DRINKS") == 56.0
+        categoryTotal(json, "DINING_OUT") == 56.0
         categoryTotal(json, "SUBSCRIPTIONS") == 50.0
     }
 
